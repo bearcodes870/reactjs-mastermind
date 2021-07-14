@@ -9,36 +9,59 @@ const colors = ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD'];
 
 class App extends Component {
   constructor() {
-    // JS requires that super be called before accessing 'this'
+    // super must be called before accessing 'this'
     super();
-    // this.state is an object that holds "state" in its properties
+    // state is an object that holds information
+    // in its properties
     this.state = {
       selColorIdx: 0,
-      guesses: [],
+      guesses: [this.getNewGuess(), this.getNewGuess()],
       code: this.genCode()
     };
   }
 
-  genCode = () => new Array(4).fill().map(() => Math.floor(Math.random() * colors.length));
+  getNewGuess() {
+    return {
+      // code: [null, null, null, null],
+      code: [3, 2, 1, 0], // for testing purposes
+      score: {
+        perfect: 0,
+        almost: 0
+      }
+    };
+  }
+
+  genCode() {
+    return new Array(4).fill().map(dummy => Math.floor(Math.random() * 4));
+  }
 
   render() {
     return (
       <div className="App">
-          <button onClick={() => 
-            this.setState({selColorIdx: ++this.state.selColorIdx % 4})}>
-            Next Color
-          </button>
+        <button onClick={() => this.setState((state) => {
+          return {
+            selColorIdx: ++state.selColorIdx % 4
+          };
+        })}>
+          Next Color
+        </button>
         Selected color: {colors[this.state.selColorIdx]}
         <header className="App-header">React Mastermind</header>
         <div className="flex-h">
-          <GameBoard />
+          <GameBoard
+            colors={colors}
+            guesses={this.state.guesses}
+          />
           <div>
-            <ColorPicker />
+            <ColorPicker
+              colors={colors}
+              selColorIdx={this.state.selColorIdx}
+            />
             <GameTimer />
             <NewGameButton />
           </div>
         </div>
-        <footer className="component">footer</footer>
+        <footer>footer</footer>
       </div>
     );
   }
