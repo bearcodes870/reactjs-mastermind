@@ -20,10 +20,14 @@ class App extends Component {
   }
 
   genCode = () => new Array(4).fill().map(() => Math.floor(Math.random() * colors.length));
-  
+
   render() {
     return (
       <div className="App">
+          <button onClick={() => 
+            this.setState({selColorIdx: ++this.state.selColorIdx % 4})}>
+            Next Color
+          </button>
         Selected color: {colors[this.state.selColorIdx]}
         <header className="App-header">React Mastermind</header>
         <div className="flex-h">
